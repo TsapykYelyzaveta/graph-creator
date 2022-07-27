@@ -37,7 +37,6 @@ export const GraphRenderingContextProvider: FC = ({ children }) => {
 
       <canvas
         onClick={(e) => {
-          console.log(e);
           graphInstance.addVertex({ x: e.pageX, y: e.pageY });
         }}
         ref={canvasRef}
@@ -56,7 +55,6 @@ const Verticle = (vertex: Vertex) => {
     graph.addVertex(vertex);
 
     const ctx2d = canvas.getContext("2d");
-    console.log(ctx2d);
 
     // ctx2d.fillStyle = 'red';
     // ctx2d.drawCircle(x, y, 10);

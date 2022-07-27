@@ -32,14 +32,10 @@ graphs[0].setEdges([
 
 graphs[1] = graphs[0].copy();
 graphs[1].addEdge({ start: graphs[1].vertices[0], end: graphs[1].vertices[2] });
-console.log(graphs[0].edges.length, graphs[1].edges.length);
 
-//graphs[0] = graphs[1];
 function App() {
   const [graph, setGraph] = useState(graphs[0]);
   const [edge, setEdge] = useState<Edge | null>(null);
-
-  // useEffect(() => {}, []);
 
   return (
     <div className="App">
@@ -99,8 +95,11 @@ function App() {
                   break;
                 case 2:
                   graph.deleteVertex(vertex);
-
                   setGraph(graph.copy());
+                  break;
+                case 4:
+                  console.log(graph.dijkstrasAlgorithm(vertex.title));
+                  //setGraph(graph.copy());
                   break;
               }
             }}

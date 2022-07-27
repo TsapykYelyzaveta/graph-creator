@@ -54,7 +54,6 @@ export class Graph {
     const index = this.vertices.findIndex((vertex) => vertex.title === v.title);
     if (index !== -1) {
       [...this.edges].forEach((edge) => {
-        console.log("edge", edge);
         if (edge.start.title === v.title || edge.end.title === v.title) {
           this.deleteEdge(edge);
         }
@@ -71,7 +70,6 @@ export class Graph {
         edge.start.title === e.start.title && edge.end.title === e.end.title
     );
     if (index !== -1) {
-      console.log("Delete", e);
       this.edges.splice(index, 1);
       return true;
     }
@@ -89,6 +87,71 @@ export class Graph {
 
   copy() {
     return new Graph([...this.vertices], [...this.edges], this.id);
+  }
+
+  formAdjacencyMatrix() {
+    const adjacencyMatrix: any = {};
+
+    this.edges.forEach((edge) => {
+      if (!adjacencyMatrix[edge.start.title]) {
+        adjacencyMatrix[edge.start.title] = {};
+      }
+      if (!adjacencyMatrix[edge.end.title]) {
+        adjacencyMatrix[edge.end.title] = {};
+      }
+
+      adjacencyMatrix[edge.start.title][edge.end.title] = edge.length;
+
+      adjacencyMatrix[edge.end.title][edge.start.title] = edge.length;
+    });
+    return adjacencyMatrix;
+  }
+  dijkstrasAlgorithm(start: string) {
+    const D: { [key: string]: number } = {};
+    const adjacencyMatrix = this.formAdjacencyMatrix();
+
+    const visit: { [key: string]: boolean } = {};
+
+    this.vertices.forEach((v) => {
+      D[v.title] = adjacencyMatrix[start][v.title] ?? Infinity;
+      visit[v.title] = false;
+    });
+    D[start] = 0;
+    visit[start] = true;
+    let current: string;
+    let min: number;
+    do {
+      current = null;
+      min = Infinity;
+
+      this.vertices.forEach((v) => {
+        if (D[v.title] < min && !visit[v.title]) {
+          min = D[v.title];
+          current = v.title;
+        }
+      });
+      visit[current] = true;
+      if (current === null) {
+        return D;
+      }
+      this.edges.forEach((edge) => {
+        if (
+          edge.start.title === current &&
+          !visit[edge.end.title] &&
+          D[current] + edge.length < D[edge.end.title]
+        ) {
+          D[edge.end.title] = D[current] + edge.length;
+        }
+        if (
+          edge.end.title === current &&
+          !visit[edge.start.title] &&
+          D[current] + edge.length < D[edge.start.title]
+        ) {
+          D[edge.start.title] = D[current] + edge.length;
+        }
+      });
+    } while (current !== null);
+    return D;
   }
 }
 

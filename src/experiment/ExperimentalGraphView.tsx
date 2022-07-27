@@ -148,28 +148,20 @@ export function Edge({
 
   const handleClick = useCallback(
     (e) => {
-      //console.log("start", start);
-      //console.log("end", end);
-      //console.log("e", e.offsetX + " " + e.offsetY);
-
       if (compareWithError(start.x, end.x)) {
-        //console.log(1);
         if (
           e.offsetY <= Math.max(start.y, end.y) &&
           e.offsetY >= Math.min(start.y, end.y) &&
           compareWithError(start.x, e.offsetX, 1)
         ) {
-          //console.log(1.1);
           onClick({ length, end, start });
         }
       } else if (compareWithError(start.y, end.y)) {
-        //console.log(2);
         if (
           e.offsetX <= Math.max(start.x, end.x) &&
           e.offsetX >= Math.min(start.x, end.x) &&
           compareWithError(start.y, e.offsetY, 1)
         ) {
-          //console.log(2.1);
           onClick({ length, end, start });
         }
       } else if (
@@ -178,7 +170,6 @@ export function Edge({
           (e.offsetY - start.y) / (end.y - start.y)
         )
       ) {
-        //console.log(3);
         onClick({ length, end, start });
       }
     },
@@ -240,16 +231,21 @@ export function Menu() {
       "Додавання вершин",
       "Додавання ребер",
       "Видалення вершин",
-      "Видалення ребер"
+      "Видалення ребер",
+      "Алгоритм Дейкстри"
     ],
     []
   );
   return (
     <div>
-      <span>Step: {menu[step]}</span>
+      <span>
+        Крок: {step} {menu[step]}
+      </span>
       <div>
         {menu.map((el, index) => (
-          <button onClick={() => setStep(index)}>{el}</button>
+          <button key={index} onClick={() => setStep(index)}>
+            {el}
+          </button>
         ))}
       </div>
     </div>
